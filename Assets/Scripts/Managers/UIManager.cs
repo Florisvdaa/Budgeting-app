@@ -1,16 +1,91 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public static UIManager Instance { get; private set; }
+
+    [Header("UI Panels")]
+    [SerializeField] private List<UIPanel> panels;
+    [SerializeField] private GameObject mainMenuPanel;
+
+    [Header("Buttons")]
+    [SerializeField] private Button returnButton;
+    [SerializeField] private Button dashboardButton;
+    [SerializeField] private Button incomeButton;
+    [SerializeField] private Button expenseButton;
+
+    private Dictionary<string, GameObject> panelDict = new Dictionary<string, GameObject>();
+
+    private void Awake()
     {
-        
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
+
+        foreach (var panel in panels)
+        {
+            if (!panelDict.ContainsKey(panel.panelName))
+            {
+                panelDict.Add(panel.panelName, panel.panelObject);
+            }
+        }
+
+        // Buttons setup
+        dashboardButton.onClick.AddListener(() => ShowPanel("Dashboard"));
+        incomeButton.onClick.AddListener(() => ShowPanel("Income"));
+        expenseButton.onClick.AddListener(() => ShowPanel("Expense"));
+        returnButton.onClick.AddListener(() => ShowMainMenu());
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ShowPanel(string panelName)
     {
-        
+        foreach (var panel in panelDict.Values)
+        {
+            panel.SetActive(false);
+        }
+
+        if (panelDict.ContainsKey(panelName))
+        {
+            panelDict[panelName].SetActive(true);
+            SetNavigationButtonsActive(false);
+            returnButton.gameObject.SetActive(true);
+        }
+        else
+        {
+            Debug.LogWarning($"Panel '{panelName}' not found.");
+        }
+    }
+    public void ShowMainMenu()
+    {
+        foreach (var panel in panelDict.Values)
+        {
+            panel.SetActive(false);
+        }
+
+        mainMenuPanel.SetActive(true);
+        SetNavigationButtonsActive(true);
+        returnButton.gameObject.SetActive(false);
+    }
+
+    private void SetNavigationButtonsActive(bool isActive)
+    {
+        dashboardButton.gameObject.SetActive(isActive);
+        incomeButton.gameObject.SetActive(isActive);
+        expenseButton.gameObject.SetActive(isActive);
     }
 }
+
+[System.Serializable]
+public class UIPanel
+{
+    public string panelName;
+    public GameObject panelObject;
+}
+
