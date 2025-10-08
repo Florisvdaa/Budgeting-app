@@ -12,7 +12,6 @@ public class UIManager : MonoBehaviour
 
     [Header("Buttons")]
     [SerializeField] private Button returnButton;
-    [SerializeField] private Button dashboardButton;
     [SerializeField] private Button incomeButton;
     [SerializeField] private Button expenseButton;
 
@@ -38,11 +37,16 @@ public class UIManager : MonoBehaviour
         }
 
         // Buttons setup
-        dashboardButton.onClick.AddListener(() => ShowPanel("Dashboard"));
         incomeButton.onClick.AddListener(() => ShowPanel("Income"));
         expenseButton.onClick.AddListener(() => ShowPanel("Expense"));
         returnButton.onClick.AddListener(() => ShowMainMenu());
     }
+
+    private void Start()
+    {
+        ShowMainMenu();
+    }
+
 
     public void ShowPanel(string panelName)
     {
@@ -69,14 +73,23 @@ public class UIManager : MonoBehaviour
             panel.SetActive(false);
         }
 
-        mainMenuPanel.SetActive(true);
+        // Activate the dashboard panel explicitly
+        if (panelDict.ContainsKey("Dashboard"))
+        {
+            panelDict["Dashboard"].SetActive(true);
+        }
+        else
+        {
+            Debug.LogWarning("Dashboard panel not found in panelDict.");
+        }
+
         SetNavigationButtonsActive(true);
         returnButton.gameObject.SetActive(false);
+
     }
 
     private void SetNavigationButtonsActive(bool isActive)
     {
-        dashboardButton.gameObject.SetActive(isActive);
         incomeButton.gameObject.SetActive(isActive);
         expenseButton.gameObject.SetActive(isActive);
     }
