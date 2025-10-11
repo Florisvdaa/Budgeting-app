@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button returnButton;
     [SerializeField] private Button incomeButton;
     [SerializeField] private Button expenseButton;
+    [SerializeField] private Button tagsButton;
 
     private Dictionary<string, GameObject> panelDict = new Dictionary<string, GameObject>();
 
@@ -39,6 +40,7 @@ public class UIManager : MonoBehaviour
         // Buttons setup
         incomeButton.onClick.AddListener(() => ShowPanel("Income"));
         expenseButton.onClick.AddListener(() => ShowPanel("Expense"));
+        tagsButton.onClick.AddListener(() => ShowPanel("TagPanel"));
         returnButton.onClick.AddListener(() => ShowMainMenu());
     }
 
@@ -85,13 +87,13 @@ public class UIManager : MonoBehaviour
 
         SetNavigationButtonsActive(true);
         returnButton.gameObject.SetActive(false);
-
     }
 
     private void SetNavigationButtonsActive(bool isActive)
     {
         incomeButton.gameObject.SetActive(isActive);
         expenseButton.gameObject.SetActive(isActive);
+        tagsButton.gameObject.SetActive(isActive);
     }
 }
 
