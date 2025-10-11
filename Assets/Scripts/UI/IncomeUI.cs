@@ -15,6 +15,8 @@ public class IncomeUI : MonoBehaviour
             BudgetManager.Instance.SetIncome(amount);
 
             dashboard.setRemaining = true;
+
+            UIManager.Instance.ShowMainMenu();
         }
         else
         {

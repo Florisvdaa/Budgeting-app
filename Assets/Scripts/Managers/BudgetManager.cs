@@ -36,9 +36,16 @@ public class BudgetManager : MonoBehaviour
 
     public decimal GetRemainingBudget()
     {
-        decimal totalExpenses = expenses.Sum(e => e.Amount);
+        if (income == null)
+        {
+            Debug.LogWarning("Income is not set.");
+            return 0m;
+        }
+
+        decimal totalExpenses = expenses?.Sum(e => e.Amount) ?? 0m;
         return income.MonthlyAmount - totalExpenses;
     }
+
     public void SaveIncome()
     {
         PlayerPrefs.SetString("income", income.MonthlyAmount.ToString());

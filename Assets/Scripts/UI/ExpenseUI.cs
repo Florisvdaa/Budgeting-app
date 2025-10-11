@@ -19,5 +19,7 @@ public class ExpenseUI : MonoBehaviour
         bool recurring = recurringToggle.isOn;
 
         budgetManager.AddExpense(name, amount, tag, recurring);
+
+        UIManager.Instance.ShowMainMenu();
     }
 }
